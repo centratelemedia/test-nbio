@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"github.com/lesismal/nbio"
 )
@@ -10,6 +11,7 @@ type GpsTrackerConnection struct {
 }
 
 func main() {
+	var maxLengthPacket int = 1024
 	g := nbio.NewGopher(nbio.Config{
 		Network:            "tcp",
 		Addrs:              []string{":8888"},
@@ -22,6 +24,7 @@ func main() {
 		var prev byte
 		c.ReadBuffer = append(c.ReadBuffer, data...)
 		for index, v := range c.ReadBuffer {
+			println("index=>", index)
 			if v == '\n' {
 				if prev == '\r' {
 					println("Index =>", index)
@@ -31,6 +34,9 @@ func main() {
 				}
 			}
 			prev = v
+		}
+		if len(c.ReadBuffer) > maxLengthPacket {
+			c.CloseWithError(errors.New("Buffer exceeds the maximum limit"))
 		}
 		//c.Write(append([]byte{}, data...))
 	})
