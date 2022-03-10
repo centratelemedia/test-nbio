@@ -8,4 +8,7 @@ require (
 
 )
 
-require github.com/snksoft/crc v1.1.0 // indirect
+require (
+	github.com/go-sql-driver/mysql v1.6.0 // indirect
+	github.com/snksoft/crc v1.1.0 // indirect
+)
